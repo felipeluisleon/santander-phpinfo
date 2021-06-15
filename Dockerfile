@@ -1,2 +1,2 @@
 from apline
-run apk install php
+run apk add php
