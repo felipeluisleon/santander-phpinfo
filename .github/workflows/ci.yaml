@@ -9,3 +9,12 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+      - name: build 
+        run: docker image build --tag santander-phpinfo:test --file Dockerfile ./
+      - name: network
+        run: docker network create santander-phpinfo-network
+      - name: run
+        run: docker container run -detach --entrypoint /usr/bin/php --name santander-phpinfo --workdir /app/ --network santander-phpinfo-network santander-phpinfo:test -f index.php -S 0.0.0.0:8080
+      - name: logs
+        run: while true; do sleep 10; docker container logs santander-phpinfo 2>&1 | grep started && break; done
+  
